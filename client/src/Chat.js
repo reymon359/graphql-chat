@@ -1,17 +1,18 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import { messagesQuery } from './graphql/queries';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { addMessageMutation, messagesQuery } from './graphql/queries';
 import MessageInput from './MessageInput';
 import MessageList from './MessageList';
 
 const Chat = ({ user }) => {
-  const {data} = useQuery(messagesQuery);
-  const messages = data ? data.messages : [];
+	const { data } = useQuery(messagesQuery);
+	const [addMessage] = useMutation(addMessageMutation);
+	const messages = data ? data.messages : [];
 
-	const handleSend = (text) => {
-    // TODO
-  };
-  
+	const handleSend = async (text) => {
+		await addMessage({ variables: { input: { text } } });
+	};
+
 	return (
 		<section className="section">
 			<div className="container">
